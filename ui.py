@@ -718,10 +718,12 @@ def inject_global_styles():
         /* Hide Streamlit Branding */
         footer {
             visibility: hidden !important;
+            display: none !important;
         }
         
         #MainMenu {
             visibility: hidden !important;
+            display: none !important;
         }
         
         .viewerBadge_container__1QSob {
@@ -732,7 +734,7 @@ def inject_global_styles():
             display: none !important;
         }
         
-        /* Hide deployment info */
+        /* Hide deployment info - comprehensive selectors */
         [data-testid="stStatusWidget"] {
             display: none !important;
         }
@@ -747,6 +749,45 @@ def inject_global_styles():
         
         /* Hide "Created by" and "Hosted with" messages */
         div[data-testid="stNotification"] {
+            display: none !important;
+        }
+        
+        /* Additional selectors for deployment badges */
+        [data-testid="stDecoration"] {
+            display: none !important;
+        }
+        
+        [data-testid="stToolbar"] {
+            display: none !important;
+        }
+        
+        .stApp > footer {
+            display: none !important;
+        }
+        
+        .stApp [data-testid="stToolbar"] {
+            display: none !important;
+        }
+        
+        /* Hide manage app button and related elements */
+        button[kind="header"] {
+            display: none !important;
+        }
+        
+        [class*="viewerBadge"] {
+            display: none !important;
+        }
+        
+        [class*="styles_viewerBadge"] {
+            display: none !important;
+        }
+        
+        .styles_viewerBadge_container__1QSob {
+            display: none !important;
+        }
+        
+        /* Hide bottom toolbar completely */
+        section[data-testid="stSidebar"] ~ div > div:last-child {
             display: none !important;
         }
         
