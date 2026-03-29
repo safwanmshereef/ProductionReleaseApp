@@ -830,6 +830,28 @@ def inject_global_styles():
             display: none !important;
         }
         
+        /* Target bottom-right corner elements (where badges typically appear) */
+        [style*="position: fixed"][style*="bottom"],
+        [style*="position: absolute"][style*="bottom"] {
+            display: none !important;
+        }
+        
+        /* Hide any small fixed elements in bottom-right */
+        div[style*="position: fixed"][style*="right: 0"],
+        div[style*="position: fixed"][style*="right:0"],
+        div[style*="position: absolute"][style*="right: 0"],
+        div[style*="position: absolute"][style*="right:0"] {
+            display: none !important;
+        }
+        
+        /* Target elements containing username */
+        [class*="safwan"],
+        [id*="safwan"],
+        div:contains("safwanmshereef"),
+        span:contains("safwanmshereef") {
+            display: none !important;
+        }
+        
         header[data-testid="stHeader"] {
             background: transparent !important;
         }
@@ -917,6 +939,82 @@ def inject_global_styles():
                     setTimeout(removeBadges, 1000);
                     setTimeout(removeBadges, 2000);
                 });
+                
+                // ULTRA AGGRESSIVE: Remove bottom-right positioned elements
+                function removeBottomRightElements() {
+                    document.querySelectorAll('*').forEach(el => {
+                        try {
+                            const rect = el.getBoundingClientRect();
+                            const style = window.getComputedStyle(el);
+                            const position = style.position;
+                            
+                            // Target fixed/absolute elements in bottom-right corner
+                            if ((position === 'fixed' || position === 'absolute') &&
+                                rect.right > window.innerWidth - 300 &&
+                                rect.bottom > window.innerHeight - 100) {
+                                
+                                const text = el.textContent || '';
+                                // Only remove if it's small and contains deployment keywords
+                                if (text.length < 150 && 
+                                    (text.includes('Created') || text.includes('Hosted') || 
+                                     text.includes('Streamlit') || text.includes('Deploy'))) {
+                                    el.style.setProperty('display', 'none', 'important');
+                                    el.remove();
+                                }
+                            }
+                        } catch(e) {}
+                    });
+                    
+                    // Remove iframes that might contain badges
+                    document.querySelectorAll('iframe').forEach(iframe => {
+                        try {
+                            const rect = iframe.getBoundingClientRect();
+                            if (rect.width < 400 && rect.height < 200) {
+                                iframe.style.setProperty('display', 'none', 'important');
+                                iframe.remove();
+                            }
+                        } catch(e) {}
+                    });
+                }
+                
+                // Run position-based removal
+                setInterval(removeBottomRightElements, 1000);
+                setTimeout(removeBottomRightElements, 2000);
+                setTimeout(removeBottomRightElements, 5000);
+            })();
+            
+            // NUCLEAR OPTION: Override Streamlit's badge rendering
+            (function() {
+                // Intercept and block any attempts to show badges
+                const originalAppendChild = Element.prototype.appendChild;
+                const originalInsertBefore = Element.prototype.insertBefore;
+                
+                function shouldBlock(node) {
+                    if (!node) return false;
+                    const text = node.textContent || '';
+                    const classes = node.className || '';
+                    return (text.includes('Created by') || 
+                            text.includes('Hosted with') || 
+                            text.includes('safwanmshereef') ||
+                            classes.includes('viewerBadge') ||
+                            classes.includes('stDeploy'));
+                }
+                
+                Element.prototype.appendChild = function(node) {
+                    if (shouldBlock(node)) {
+                        console.log('Blocked badge element');
+                        return node;
+                    }
+                    return originalAppendChild.call(this, node);
+                };
+                
+                Element.prototype.insertBefore = function(node, reference) {
+                    if (shouldBlock(node)) {
+                        console.log('Blocked badge element');
+                        return node;
+                    }
+                    return originalInsertBefore.call(this, node, reference);
+                };
             })();
         </script>
         """,
