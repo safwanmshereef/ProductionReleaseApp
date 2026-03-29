@@ -834,6 +834,91 @@ def inject_global_styles():
             background: transparent !important;
         }
         </style>
+        
+        <script>
+            // Aggressively remove Streamlit deployment badges
+            (function() {
+                const hideSelectors = [
+                    '[data-testid="stStatusWidget"]',
+                    '[data-testid="stDeployButton"]',
+                    '[data-testid="stDecoration"]',
+                    '[data-testid="stToolbar"]',
+                    '[data-testid="stBottom"]',
+                    '[data-testid="stAppDeployButton"]',
+                    '[data-testid="stToolbarActions"]',
+                    '[data-testid="baseButton-header"]',
+                    '[class*="viewerBadge"]',
+                    '[class*="styles_viewerBadge"]',
+                    'button[kind="header"]',
+                    'button[data-testid="baseButton-header"]',
+                    '.stDeployButton',
+                    '.stAppDeployButton'
+                ];
+                
+                function removeBadges() {
+                    // Remove by selectors
+                    hideSelectors.forEach(selector => {
+                        try {
+                            document.querySelectorAll(selector).forEach(el => {
+                                el.style.setProperty('display', 'none', 'important');
+                                el.style.setProperty('visibility', 'hidden', 'important');
+                                el.style.setProperty('opacity', '0', 'important');
+                                el.style.setProperty('pointer-events', 'none', 'important');
+                                el.remove();
+                            });
+                        } catch(e) {}
+                    });
+                    
+                    // Remove by text content
+                    const textPatterns = ['Created by', 'Hosted with', 'Streamlit'];
+                    document.querySelectorAll('div, span, p, a, footer').forEach(el => {
+                        const text = el.textContent || '';
+                        if (textPatterns.some(pattern => text.includes(pattern)) && 
+                            text.length < 100) { // Only short text snippets
+                            el.style.setProperty('display', 'none', 'important');
+                            el.remove();
+                        }
+                    });
+                    
+                    // Remove footer elements
+                    document.querySelectorAll('footer, #MainMenu').forEach(el => {
+                        el.remove();
+                    });
+                }
+                
+                // Execute immediately
+                removeBadges();
+                
+                // Execute on DOM ready
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', removeBadges);
+                } else {
+                    setTimeout(removeBadges, 100);
+                }
+                
+                // Monitor DOM changes with MutationObserver
+                const observer = new MutationObserver(() => {
+                    removeBadges();
+                });
+                
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['class', 'data-testid', 'style']
+                });
+                
+                // Backup: run every 500ms
+                setInterval(removeBadges, 500);
+                
+                // Run after page load
+                window.addEventListener('load', () => {
+                    setTimeout(removeBadges, 500);
+                    setTimeout(removeBadges, 1000);
+                    setTimeout(removeBadges, 2000);
+                });
+            })();
+        </script>
         """,
         unsafe_allow_html=True,
     )
