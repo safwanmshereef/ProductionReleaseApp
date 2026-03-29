@@ -12,6 +12,10 @@
 </p>
 
 <p align="center">
+  <a href="https://amsstudio.streamlit.app"><img src="https://img.shields.io/badge/🔴_Live_Demo-Click_Here-FF4B4B?style=for-the-badge" alt="Live Demo"/></a>
+</p>
+
+<p align="center">
   <a href="#features">Features</a> •
   <a href="#screenshots">Screenshots</a> •
   <a href="#installation">Installation</a> •
@@ -235,8 +239,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Plotly](https://plotly.com/) for interactive visualizations
 - [Inter Font](https://rsms.me/inter/) for beautiful typography
 
----
 
-<p align="center">
-  Made with ❤️ for modern operations teams
-</p>
