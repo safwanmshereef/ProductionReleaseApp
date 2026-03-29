@@ -15,7 +15,7 @@ st.set_page_config(
 inject_global_styles()
 init_db()
 
-header_col1, header_col2 = st.columns([6, 1])
+header_col1, header_col2 = st.columns([10, 1])
 with header_col1:
     render_header(
         "Enterprise Ops Hub",
@@ -23,8 +23,8 @@ with header_col1:
         "Command Center",
     )
 with header_col2:
-    st.markdown("<div style='height: 2px;'></div>", unsafe_allow_html=True)
-    if st.button("🔄", use_container_width=True, help="Refresh dashboard data"):
+    st.markdown("<div style='height: 0.45rem;'></div>", unsafe_allow_html=True)
+    if st.button("🔄", key="home_refresh", use_container_width=True, help="Refresh dashboard data"):
         st.rerun()
 
 session = get_session()
@@ -81,22 +81,22 @@ with left:
 
     with nav_col1:
         st.page_link("pages/1_📊_Job_Monitoring.py",
-                     label="📊 Job Monitoring", icon="📊")
+                     label="Job Monitoring", icon="📊")
         st.page_link("pages/2_🎟️_Smart_Ticketing.py",
-                     label="🎟️ Smart Ticketing", icon="🎟️")
+                     label="Smart Ticketing", icon="🎟️")
         st.page_link("pages/3_🧠_Knowledge_Assistant.py",
-                     label="🧠 Knowledge Assistant", icon="🧠")
+                     label="Knowledge Assistant", icon="🧠")
         st.page_link("pages/4_💓_System_Health.py",
-                     label="💓 System Health", icon="💓")
+                     label="System Health", icon="💓")
 
     with nav_col2:
-        st.page_link("pages/5_📜_Audit_Log.py", label="📜 Audit Log", icon="📜")
+        st.page_link("pages/5_📜_Audit_Log.py", label="Audit Log", icon="📜")
         st.page_link("pages/6_⏱️_SLA_Dashboard.py",
-                     label="⏱️ SLA Dashboard", icon="⏱️")
+                     label="SLA Dashboard", icon="⏱️")
         st.page_link("pages/7_⚡_Quick_Actions.py",
-                     label="⚡ Quick Actions", icon="⚡")
+                     label="Quick Actions", icon="⚡")
         st.page_link("pages/8_🔍_Global_Search.py",
-                     label="🔍 Global Search", icon="🔍")
+                     label="Global Search", icon="🔍")
 
     st.markdown("### ✨ Platform Features")
 
