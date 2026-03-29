@@ -791,6 +791,45 @@ def inject_global_styles():
             display: none !important;
         }
         
+        /* Aggressive hiding of all possible deployment badge locations */
+        iframe[title*="Streamlit"] {
+            display: none !important;
+        }
+        
+        [data-testid="stAppDeployButton"] {
+            display: none !important;
+        }
+        
+        button[data-testid="baseButton-header"] {
+            display: none !important;
+        }
+        
+        [data-testid="stToolbarActions"] {
+            display: none !important;
+        }
+        
+        /* Hide the entire bottom decoration bar */
+        .stAppDeployButton {
+            display: none !important;
+        }
+        
+        div[data-testid="stDecoration"] > div {
+            display: none !important;
+        }
+        
+        /* Target the specific deploy/hosting messages */
+        div:has(> div[class*="viewerBadge"]) {
+            display: none !important;
+        }
+        
+        /* Hide any text containing deployment info */
+        div:contains("Created by"),
+        div:contains("Hosted with"),
+        span:contains("Created by"),
+        span:contains("Hosted with") {
+            display: none !important;
+        }
+        
         header[data-testid="stHeader"] {
             background: transparent !important;
         }
@@ -803,24 +842,40 @@ def inject_global_styles():
 def render_header(title, subtitle, chip_text="Enterprise Operations", show_refresh=False, refresh_key="refresh"):
     """Render header with optional integrated refresh button"""
     if show_refresh:
-        # Create full-width header with integrated refresh button
+        # Create full-width header with embedded refresh icon
         st.markdown(
             f"""
-            <section class="hero-section" style="position: relative;">
+            <section class="hero-section" style="position: relative; padding-right: 4rem;">
                 <div class="hero-badge">{chip_text}</div>
                 <h1 class="hero-title">{title}</h1>
                 <p class="hero-subtitle">{subtitle}</p>
-                <div id="refresh-btn-placeholder" style="position: absolute; top: 0.75rem; right: 0.85rem; width: 50px; height: 50px;"></div>
+                <button onclick="window.location.reload()" 
+                        style="position: absolute; 
+                               top: 50%; 
+                               right: 1rem; 
+                               transform: translateY(-50%);
+                               background: var(--gradient-primary);
+                               border: 1px solid var(--glass-border);
+                               border-radius: 50%;
+                               width: 42px;
+                               height: 42px;
+                               display: flex;
+                               align-items: center;
+                               justify-content: center;
+                               cursor: pointer;
+                               font-size: 1.25rem;
+                               transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                               box-shadow: var(--shadow-md);
+                               backdrop-filter: blur(8px);"
+                        onmouseover="this.style.transform='translateY(-50%) scale(1.1) rotate(90deg)'; this.style.boxShadow='0 0 20px var(--accent-blue-glow)';"
+                        onmouseout="this.style.transform='translateY(-50%) scale(1) rotate(0deg)'; this.style.boxShadow='var(--shadow-md)';"
+                        title="Refresh dashboard">
+                    🔄
+                </button>
             </section>
             """,
             unsafe_allow_html=True,
         )
-        # Use a container positioned to overlay the placeholder
-        col1, col2, col3 = st.columns([1, 20, 1])
-        with col3:
-            st.markdown("<div style='height: -2.8rem; margin-top: -2.8rem;'></div>", unsafe_allow_html=True)
-            if st.button("🔄", key=refresh_key, help="Refresh dashboard"):
-                st.rerun()
     else:
         # Regular header without refresh button
         st.markdown(
