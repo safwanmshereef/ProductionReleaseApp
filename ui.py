@@ -759,17 +759,27 @@ def inject_global_styles():
     )
 
 
-def render_header(title, subtitle, chip_text="Enterprise Operations"):
-    st.markdown(
-        f"""
-        <section class="hero-section">
-            <div class="hero-badge">{chip_text}</div>
-            <h1 class="hero-title">{title}</h1>
-            <p class="hero-subtitle">{subtitle}</p>
-        </section>
-        """,
-        unsafe_allow_html=True,
-    )
+def render_header(title, subtitle, chip_text="Enterprise Operations", show_refresh=False, refresh_key="refresh"):
+    """Render header with optional integrated refresh button"""
+    col1, col2 = st.columns([11, 1])
+    
+    with col1:
+        st.markdown(
+            f"""
+            <section class="hero-section">
+                <div class="hero-badge">{chip_text}</div>
+                <h1 class="hero-title">{title}</h1>
+                <p class="hero-subtitle">{subtitle}</p>
+            </section>
+            """,
+            unsafe_allow_html=True,
+        )
+    
+    with col2:
+        if show_refresh:
+            st.markdown("<div style='height: 0.5rem;'></div>", unsafe_allow_html=True)
+            if st.button("🔄", key=refresh_key, use_container_width=True, help="Refresh dashboard"):
+                st.rerun()
 
 
 def metric_card(label, value, delta="", tone="neutral"):
