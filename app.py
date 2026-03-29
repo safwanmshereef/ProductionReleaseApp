@@ -246,13 +246,4 @@ with activity_col2:
     else:
         st.caption("No ticket data available yet.")
 
-st.markdown("---")
-st.markdown(
-    """
-    <div style="text-align: center; padding: 1rem; color: var(--text-muted); font-size: 0.85rem;">
-        <div>Enterprise Ops Hub v2.0 • Powered by Streamlit & Google Gemini</div>
-        <div style="margin-top: 0.25rem;">Made with 💜 for modern operations teams</div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+
