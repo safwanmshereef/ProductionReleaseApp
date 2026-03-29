@@ -1,0 +1,5 @@
+streamlit>=1.30.0
+pandas
+plotly
+sqlalchemy
+google-generativeai>=0.8.4
