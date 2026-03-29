@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from html import escape
 
 import pandas as pd
 import streamlit as st
@@ -132,6 +133,11 @@ with tab_timeline:
         st.info("No audit logs match the current filters.")
     else:
         for log in filtered_logs:
+            entity_type = escape(str(log.get("entity_type") or "System"))
+            entity_id = escape(str(log.get("entity_id") or ""))
+            action = escape(str(log.get("action") or "Updated"))
+            actor = escape(str(log.get("actor") or "System"))
+            details = escape(str(log.get("details") or "No details"))
             entity_icon = "📊" if log["entity_type"] == "Job" else "🎟️" if log["entity_type"] == "Ticket" else "⚙️"
 
             action_color = "#10b981"
@@ -155,25 +161,22 @@ with tab_timeline:
                 time_str = f"{int(time_ago.total_seconds() / 86400)} days ago"
 
             st.markdown(
-                f"""
-                <div class="surface-card" style="margin-bottom: 0.75rem; display: flex; gap: 1rem; align-items: flex-start;">
-                    <div style="font-size: 1.5rem; padding-top: 0.25rem;">{entity_icon}</div>
-                    <div style="flex: 1;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-                            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                <span style="font-weight: 600; color: var(--text-primary);">{log['entity_type']}</span>
-                                {f"<span style='color: var(--accent-cyan);'>{log['entity_id']}</span>" if log['entity_id'] else ""}
-                                <span style="padding: 0.2rem 0.5rem; border-radius: 4px; background: {action_color}20; color: {action_color}; font-size: 0.75rem; font-weight: 600;">{log['action']}</span>
-                            </div>
-                            <span style="font-size: 0.8rem; color: var(--text-muted);">{time_str}</span>
-                        </div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem;">{log['details']}</div>
-                        <div style="margin-top: 0.35rem; font-size: 0.8rem; color: var(--text-muted);">
-                            by <strong>{log['actor']}</strong> • {log['created_at'].strftime('%Y-%m-%d %H:%M:%S UTC')}
-                        </div>
-                    </div>
-                </div>
-                """,
+                (
+                    f'<div class="surface-card" style="margin-bottom: 0.75rem; display: flex; gap: 1rem; align-items: flex-start;">'
+                    f'<div style="font-size: 1.5rem; padding-top: 0.25rem;">{entity_icon}</div>'
+                    '<div style="flex: 1;">'
+                    '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">'
+                    '<div style="display: flex; align-items: center; gap: 0.75rem;">'
+                    f'<span style="font-weight: 600; color: var(--text-primary);">{entity_type}</span>'
+                    + (f"<span style='color: var(--accent-cyan);'>{entity_id}</span>" if entity_id else "")
+                    + f'<span style="padding: 0.2rem 0.5rem; border-radius: 4px; background: {action_color}20; color: {action_color}; font-size: 0.75rem; font-weight: 600;">{action}</span>'
+                    '</div>'
+                    f'<span style="font-size: 0.8rem; color: var(--text-muted);">{time_str}</span>'
+                    '</div>'
+                    f'<div style="color: var(--text-secondary); font-size: 0.9rem;">{details}</div>'
+                    f'<div style="margin-top: 0.35rem; font-size: 0.8rem; color: var(--text-muted);">by <strong>{actor}</strong> • {log["created_at"].strftime("%Y-%m-%d %H:%M:%S UTC")}</div>'
+                    "</div></div>"
+                ),
                 unsafe_allow_html=True,
             )
 

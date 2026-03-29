@@ -23,6 +23,8 @@ def inject_global_styles():
             --accent-orange: #ff7a00;
             --accent-red: #f4212e;
             --accent-purple: #7856ff;
+            --accent-cyan: #22d3ee;
+            --accent-violet: #a78bfa;
             --border: rgba(255, 255, 255, 0.08);
             --border-strong: rgba(255, 255, 255, 0.15);
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -325,6 +327,15 @@ def inject_global_styles():
             transform: translateY(0);
         }
 
+        .stButton > button:disabled {
+            background: var(--bg-elevated) !important;
+            color: var(--text-secondary) !important;
+            border: 1px solid var(--border) !important;
+            opacity: 1 !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+        }
+
         /* Form Inputs */
         .stTextInput > div > div > input,
         .stTextArea textarea,
@@ -492,6 +503,10 @@ def inject_global_styles():
         .stDownloadButton > button:hover {
             background: var(--bg-elevated) !important;
             border-color: var(--border-strong) !important;
+        }
+
+        pre, code {
+            color: #cbd5e1 !important;
         }
 
         /* Scrollbar */

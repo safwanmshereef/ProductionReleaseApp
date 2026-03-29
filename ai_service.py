@@ -1,7 +1,7 @@
 import json
 import importlib
 import re
-from typing import Any, Dict, List, cast
+from typing import Any, Dict, List, Optional, cast
 
 import streamlit as st
 
@@ -11,6 +11,19 @@ except Exception:
     genai = None
 
 DEFAULT_MODEL = "gemini-1.5-flash"
+MODEL_CANDIDATES = [
+    "gemini-3.1-pro",
+    "gemini-3.1-flash",
+    "gemini-3.0-pro",
+    "gemini-3.0-flash",
+    "gemini-2.5-pro",
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-exp",
+    "gemini-1.5-pro",
+    "gemini-1.5-flash",
+]
+SAFETY_SETTINGS: List[Dict[str, Any]] = []
 
 
 def get_google_api_key() -> str:
@@ -26,6 +39,47 @@ def is_gemini_ready() -> bool:
     return bool(genai is not None and get_google_api_key())
 
 
+@st.cache_resource
+def connect_to_best_model(key: str) -> Optional[str]:
+    if genai is None or not key:
+        return None
+
+    genai_client = cast(Any, genai)
+    try:
+        genai_client.configure(api_key=key)
+        available = []
+        for model in genai_client.list_models():
+            model_name = (getattr(model, "name", "") or "").replace("models/", "")
+            methods = getattr(model, "supported_generation_methods", []) or []
+            if model_name and "generateContent" in methods:
+                available.append(model_name)
+    except Exception:
+        return None
+
+    def _verify(candidate_name: str) -> bool:
+        try:
+            model = genai_client.GenerativeModel(
+                candidate_name,
+                safety_settings=SAFETY_SETTINGS,
+            )
+            response = cast(Any, model).generate_content("ping")
+            return bool(getattr(response, "text", None) or getattr(response, "candidates", None))
+        except Exception:
+            return False
+
+    for candidate in MODEL_CANDIDATES:
+        matches = [name for name in available if candidate in name]
+        for matched_name in matches:
+            if _verify(matched_name):
+                return matched_name
+
+    for fallback in ("gemini-2.5-flash", DEFAULT_MODEL):
+        if _verify(fallback):
+            return fallback
+
+    return None
+
+
 def _configure_model(model_name: str = DEFAULT_MODEL, system_instruction: str = ""):
     if genai is None:
         raise RuntimeError(
@@ -38,9 +92,19 @@ def _configure_model(model_name: str = DEFAULT_MODEL, system_instruction: str = 
 
     genai_client = cast(Any, genai)
     genai_client.configure(api_key=api_key)
+    selected_model = model_name
+    if model_name == DEFAULT_MODEL:
+        best_model = connect_to_best_model(api_key)
+        if best_model:
+            selected_model = best_model
+
     if system_instruction:
-        return genai_client.GenerativeModel(model_name, system_instruction=system_instruction)
-    return genai_client.GenerativeModel(model_name)
+        return genai_client.GenerativeModel(
+            selected_model,
+            system_instruction=system_instruction,
+            safety_settings=SAFETY_SETTINGS,
+        )
+    return genai_client.GenerativeModel(selected_model, safety_settings=SAFETY_SETTINGS)
 
 
 def generate_text(

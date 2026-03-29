@@ -1,4 +1,5 @@
 from datetime import datetime
+from html import escape
 
 import pandas as pd
 import streamlit as st
@@ -109,7 +110,7 @@ if search_query.strip():
         f"""
         <div style="padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 1rem;">
             <span style="color: var(--text-primary); font-weight: 600;">
-                Found {total_results} results for "{search_query}"
+                Found {total_results} results for "{escape(search_query)}"
             </span>
             <span style="color: var(--text-muted); margin-left: 1rem;">
                 ({len(job_results)} jobs, {len(ticket_results)} tickets, {len(activity_results)} activities)
@@ -123,6 +124,12 @@ if search_query.strip():
         st.markdown("### 📊 Jobs")
 
         for job in job_results:
+            job_id = escape(str(job.job_id or "Unknown"))
+            job_type = escape(str(job.job_type or "Unknown"))
+            owner = escape(str(job.owner or "Unassigned"))
+            status = escape(str(job.status or "Unknown"))
+            priority = escape(str(job.priority or "Unknown"))
+            notes = escape(str(job.notes or ""))
             highlight_parts = []
             if needle in (job.job_id or "").lower():
                 highlight_parts.append("ID")
@@ -137,15 +144,15 @@ if search_query.strip():
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div>
                             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
-                                <span style="font-weight: 700; color: var(--accent-cyan); font-size: 1.1rem;">{job.job_id}</span>
-                                <span style="color: var(--text-secondary);">{job.job_type}</span>
-                                {status_chip(job.status)}
-                                {status_chip(job.priority)}
+                                <span style="font-weight: 700; color: var(--accent-cyan); font-size: 1.1rem;">{job_id}</span>
+                                <span style="color: var(--text-secondary);">{job_type}</span>
+                                {status_chip(status)}
+                                {status_chip(priority)}
                             </div>
                             <div style="color: var(--text-muted); font-size: 0.85rem;">
-                                Owner: {job.owner or 'Unassigned'} • Duration: {job.duration_min} min • SLA: {job.sla_min} min
+                                Owner: {owner} • Duration: {job.duration_min} min • SLA: {job.sla_min} min
                             </div>
-                            {f"<div style='color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; padding: 0.5rem; background: rgba(255,255,255,0.02); border-radius: 6px;'>{job.notes[:200]}{'...' if len(job.notes or '') > 200 else ''}</div>" if job.notes else ""}
+                            {f"<div style='color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; padding: 0.5rem; background: rgba(255,255,255,0.02); border-radius: 6px;'>{notes[:200]}{'...' if len(notes) > 200 else ''}</div>" if notes else ""}
                         </div>
                         <div style="text-align: right;">
                             <div style="font-size: 0.75rem; color: var(--text-muted);">Match in: {', '.join(highlight_parts) if highlight_parts else 'Content'}</div>
@@ -160,6 +167,14 @@ if search_query.strip():
         st.markdown("### 🎟️ Tickets")
 
         for ticket in ticket_results:
+            ticket_no = escape(str(ticket.ticket_no or "Unknown"))
+            ticket_title = escape(str(ticket.title or "Untitled"))
+            ticket_desc = escape(str(ticket.description or "No description"))
+            ticket_category = escape(str(ticket.category or "Other"))
+            ticket_assignee = escape(str(ticket.assignee or "Unassigned"))
+            ticket_requester = escape(str(ticket.requester or "Unknown"))
+            ticket_status = escape(str(ticket.status or "Unknown"))
+            ticket_priority = escape(str(ticket.priority or "Unknown"))
             highlight_parts = []
             if needle in (ticket.ticket_no or "").lower():
                 highlight_parts.append("ID")
@@ -176,17 +191,17 @@ if search_query.strip():
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div style="flex: 1;">
                             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
-                                <span style="font-weight: 700; color: var(--accent-violet); font-size: 1.1rem;">{ticket.ticket_no}</span>
-                                {status_chip(ticket.status)}
-                                {status_chip(ticket.priority)}
-                                <span style="color: var(--text-muted); font-size: 0.8rem;">{ticket.category}</span>
+                                <span style="font-weight: 700; color: var(--accent-violet); font-size: 1.1rem;">{ticket_no}</span>
+                                {status_chip(ticket_status)}
+                                {status_chip(ticket_priority)}
+                                <span style="color: var(--text-muted); font-size: 0.8rem;">{ticket_category}</span>
                             </div>
-                            <div style="color: var(--text-primary); font-weight: 500; margin-bottom: 0.25rem;">{ticket.title}</div>
+                            <div style="color: var(--text-primary); font-weight: 500; margin-bottom: 0.25rem;">{ticket_title}</div>
                             <div style="color: var(--text-muted); font-size: 0.85rem;">
-                                Assignee: {ticket.assignee or 'Unassigned'} • Requester: {ticket.requester or 'Unknown'}
+                                Assignee: {ticket_assignee} • Requester: {ticket_requester}
                             </div>
                             <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.5rem; padding: 0.5rem; background: rgba(255,255,255,0.02); border-radius: 6px;">
-                                {ticket.description[:250]}{'...' if len(ticket.description or '') > 250 else ''}
+                                {ticket_desc[:250]}{'...' if len(ticket_desc) > 250 else ''}
                             </div>
                         </div>
                         <div style="text-align: right; margin-left: 1rem;">
@@ -209,6 +224,10 @@ if search_query.strip():
                 ticket_ref = ticket.ticket_no if ticket else f"Ticket #{activity.ticket_id}"
             finally:
                 session.close()
+            ticket_ref_safe = escape(str(ticket_ref))
+            action_safe = escape(str(activity.action or "Updated"))
+            note_safe = escape(str(activity.note or "No details"))
+            actor_safe = escape(str(activity.actor or "System"))
 
             created_str = activity.created_at.strftime(
                 "%Y-%m-%d %H:%M") if activity.created_at else "Unknown"
@@ -219,12 +238,12 @@ if search_query.strip():
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div>
                             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
-                                <span style="color: var(--accent-cyan);">{ticket_ref}</span>
-                                <span style="padding: 0.2rem 0.5rem; border-radius: 4px; background: rgba(139,92,246,0.15); color: #a78bfa; font-size: 0.75rem; font-weight: 600;">{activity.action}</span>
+                                <span style="color: var(--accent-cyan);">{ticket_ref_safe}</span>
+                                <span style="padding: 0.2rem 0.5rem; border-radius: 4px; background: rgba(139,92,246,0.15); color: #a78bfa; font-size: 0.75rem; font-weight: 600;">{action_safe}</span>
                             </div>
-                            <div style="color: var(--text-secondary); font-size: 0.9rem;">{activity.note or 'No details'}</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">{note_safe}</div>
                             <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;">
-                                by {activity.actor or 'System'} • {created_str}
+                                by {actor_safe} • {created_str}
                             </div>
                         </div>
                     </div>
