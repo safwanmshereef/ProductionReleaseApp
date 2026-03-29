@@ -72,29 +72,29 @@ def inject_global_styles():
             color: var(--text-secondary);
         }
 
-        /* Hero Section - Clean & Modern */
+        /* Hero Section - Compact & Modern */
         .hero-section {
             position: relative;
-            padding: 1.75rem 2rem;
-            border-radius: var(--radius-xl);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-lg);
             background: var(--bg-secondary);
             border: 1px solid var(--border);
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.9rem;
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            padding: 0.35rem 0.75rem;
+            padding: 0.22rem 0.55rem;
             border-radius: var(--radius-sm);
             background: rgba(29, 155, 240, 0.12);
-            font-size: 0.7rem;
+            font-size: 0.62rem;
             font-weight: 600;
             letter-spacing: 0.03em;
             text-transform: uppercase;
             color: var(--accent-blue);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.45rem;
         }
 
         .hero-badge::before {
@@ -109,17 +109,18 @@ def inject_global_styles():
         .hero-title {
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 800;
-            font-size: 1.75rem;
-            line-height: 1.2;
-            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+            line-height: 1.15;
+            margin-bottom: 0.25rem;
             color: var(--text-primary);
         }
 
         .hero-subtitle {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            max-width: 550px;
+            font-size: 0.82rem;
+            line-height: 1.35;
+            max-width: 680px;
+            margin: 0;
         }
 
         /* Metric Cards - Clean Cards */
@@ -545,11 +546,15 @@ def inject_global_styles():
             }
 
             .hero-section {
-                padding: 1.25rem;
+                padding: 0.9rem 1rem;
             }
 
             .hero-title {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
+            }
+
+            .hero-subtitle {
+                font-size: 0.78rem;
             }
         }
 
