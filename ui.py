@@ -714,6 +714,27 @@ def inject_global_styles():
                 font-size: 0.76rem;
             }
         }
+        
+        /* Hide Streamlit Branding */
+        footer {
+            visibility: hidden !important;
+        }
+        
+        #MainMenu {
+            visibility: hidden !important;
+        }
+        
+        .viewerBadge_container__1QSob {
+            display: none !important;
+        }
+        
+        [data-testid="stBottom"] {
+            display: none !important;
+        }
+        
+        header[data-testid="stHeader"] {
+            background: transparent !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
