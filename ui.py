@@ -75,32 +75,32 @@ def inject_global_styles():
         /* Hero Section - Compact & Modern */
         .hero-section {
             position: relative;
-            padding: 1rem 1.25rem;
+            padding: 0.62rem 0.9rem;
             border-radius: var(--radius-lg);
             background: var(--bg-secondary);
             border: 1px solid var(--border);
-            margin-bottom: 0.9rem;
+            margin-bottom: 0.5rem;
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.22rem 0.55rem;
+            gap: 0.3rem;
+            padding: 0.16rem 0.45rem;
             border-radius: var(--radius-sm);
             background: rgba(29, 155, 240, 0.12);
-            font-size: 0.62rem;
+            font-size: 0.58rem;
             font-weight: 600;
             letter-spacing: 0.03em;
             text-transform: uppercase;
             color: var(--accent-blue);
-            margin-bottom: 0.45rem;
+            margin-bottom: 0.22rem;
         }
 
         .hero-badge::before {
             content: "";
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background: var(--accent-green);
             box-shadow: 0 0 6px var(--accent-green);
@@ -109,16 +109,16 @@ def inject_global_styles():
         .hero-title {
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 800;
-            font-size: 1.4rem;
-            line-height: 1.15;
-            margin-bottom: 0.25rem;
+            font-size: 1.12rem;
+            line-height: 1.08;
+            margin-bottom: 0.1rem;
             color: var(--text-primary);
         }
 
         .hero-subtitle {
             color: var(--text-secondary);
-            font-size: 0.82rem;
-            line-height: 1.35;
+            font-size: 0.74rem;
+            line-height: 1.2;
             max-width: 680px;
             margin: 0;
         }
@@ -126,11 +126,12 @@ def inject_global_styles():
         /* Metric Cards - Clean Cards */
         .metric-card {
             position: relative;
-            padding: 1.25rem;
-            border-radius: var(--radius-lg);
+            padding: 0.58rem 0.72rem;
+            border-radius: var(--radius-md);
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             transition: all 0.2s ease;
+            min-height: 70px;
         }
 
         .metric-card:hover {
@@ -145,25 +146,26 @@ def inject_global_styles():
 
         .metric-label {
             color: var(--text-muted);
-            font-size: 0.7rem;
+            font-size: 0.56rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.06em;
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.14rem;
         }
 
         .metric-value {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.75rem;
+            font-size: 1.32rem;
             font-weight: 800;
             line-height: 1;
             color: var(--text-primary);
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.08rem;
         }
 
         .metric-delta {
-            font-size: 0.75rem;
+            font-size: 0.64rem;
             font-weight: 500;
+            line-height: 1.1;
         }
 
         .metric-delta.positive { color: var(--accent-green); }
@@ -546,25 +548,26 @@ def inject_global_styles():
             }
 
             .hero-section {
-                padding: 0.9rem 1rem;
+                padding: 0.56rem 0.72rem;
             }
 
             .hero-title {
-                font-size: 1.25rem;
+                font-size: 1.04rem;
             }
 
             .hero-subtitle {
-                font-size: 0.78rem;
+                font-size: 0.7rem;
             }
         }
 
         @media (max-width: 768px) {
             .metric-card {
-                padding: 1rem;
+                padding: 0.54rem 0.62rem;
+                min-height: 64px;
             }
 
             .metric-value {
-                font-size: 1.5rem;
+                font-size: 1.16rem;
             }
         }
         </style>
