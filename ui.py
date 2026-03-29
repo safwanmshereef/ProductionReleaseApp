@@ -732,6 +732,24 @@ def inject_global_styles():
             display: none !important;
         }
         
+        /* Hide deployment info */
+        [data-testid="stStatusWidget"] {
+            display: none !important;
+        }
+        
+        [data-testid="stDeployButton"] {
+            display: none !important;
+        }
+        
+        .stDeployButton {
+            display: none !important;
+        }
+        
+        /* Hide "Created by" and "Hosted with" messages */
+        div[data-testid="stNotification"] {
+            display: none !important;
+        }
+        
         header[data-testid="stHeader"] {
             background: transparent !important;
         }
