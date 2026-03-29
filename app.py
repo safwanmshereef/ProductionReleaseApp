@@ -23,8 +23,8 @@ with header_col1:
         "Command Center",
     )
 with header_col2:
-    st.markdown("<div style='height: 40px;'></div>", unsafe_allow_html=True)
-    if st.button("🔄 Refresh", use_container_width=True, help="Refresh dashboard data"):
+    st.markdown("<div style='height: 2px;'></div>", unsafe_allow_html=True)
+    if st.button("🔄", use_container_width=True, help="Refresh dashboard data"):
         st.rerun()
 
 session = get_session()

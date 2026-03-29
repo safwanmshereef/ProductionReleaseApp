@@ -52,7 +52,7 @@ def inject_global_styles():
 
         .block-container {
             max-width: 1400px;
-            padding: 1.5rem 2rem 3rem;
+            padding: 0.85rem 2rem 2.4rem;
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -111,7 +111,7 @@ def inject_global_styles():
             font-weight: 800;
             font-size: 1.12rem;
             line-height: 1.08;
-            margin-bottom: 0.1rem;
+            margin: 0 0 0.1rem 0;
             color: var(--text-primary);
         }
 
@@ -146,24 +146,24 @@ def inject_global_styles():
 
         .metric-label {
             color: var(--text-muted);
-            font-size: 0.56rem;
+            font-size: 0.68rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.06em;
-            margin-bottom: 0.14rem;
+            margin-bottom: 0.2rem;
         }
 
         .metric-value {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.32rem;
+            font-size: 1.7rem;
             font-weight: 800;
             line-height: 1;
             color: var(--text-primary);
-            margin-bottom: 0.08rem;
+            margin-bottom: 0.12rem;
         }
 
         .metric-delta {
-            font-size: 0.64rem;
+            font-size: 0.82rem;
             font-weight: 500;
             line-height: 1.1;
         }
@@ -544,7 +544,7 @@ def inject_global_styles():
         /* Responsive */
         @media (max-width: 1024px) {
             .block-container {
-                padding: 1rem;
+                padding: 0.7rem 1rem 1.5rem;
             }
 
             .hero-section {
@@ -567,7 +567,15 @@ def inject_global_styles():
             }
 
             .metric-value {
-                font-size: 1.16rem;
+                font-size: 1.4rem;
+            }
+
+            .metric-label {
+                font-size: 0.62rem;
+            }
+
+            .metric-delta {
+                font-size: 0.76rem;
             }
         }
         </style>
