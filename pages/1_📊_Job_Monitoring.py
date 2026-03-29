@@ -82,7 +82,8 @@ else:
         ]
     )
 
-filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([1.2, 1, 1, 1])
+filter_col1, filter_col2, filter_col3, filter_col4, filter_col5 = st.columns([
+                                                                             1.2, 1, 1, 1, 0.4])
 with filter_col1:
     search_job = st.text_input(
         "Search Job ID or Type", placeholder="JOB-1001, ETL")
@@ -99,6 +100,10 @@ with filter_col4:
         default=sorted(df["Owner"].dropna().unique().tolist()
                        ) if not df.empty else [],
     )
+with filter_col5:
+    st.markdown("<div style='height: 28px;'></div>", unsafe_allow_html=True)
+    if st.button("🔄", help="Refresh data", use_container_width=True):
+        st.rerun()
 
 filtered_df = df.copy()
 if not filtered_df.empty:

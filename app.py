@@ -15,11 +15,17 @@ st.set_page_config(
 inject_global_styles()
 init_db()
 
-render_header(
-    "Enterprise Ops Hub",
-    "Monitor pipelines, resolve incidents, and collaborate with AI in one streamlined workspace.",
-    "Command Center",
-)
+header_col1, header_col2 = st.columns([6, 1])
+with header_col1:
+    render_header(
+        "Enterprise Ops Hub",
+        "Monitor pipelines, resolve incidents, and collaborate with AI in one streamlined workspace.",
+        "Command Center",
+    )
+with header_col2:
+    st.markdown("<div style='height: 40px;'></div>", unsafe_allow_html=True)
+    if st.button("🔄 Refresh", use_container_width=True, help="Refresh dashboard data"):
+        st.rerun()
 
 session = get_session()
 try:

@@ -62,7 +62,8 @@ tickets_df = pd.DataFrame(
 )
 
 if not tickets_df.empty:
-    filter_col1, filter_col2, filter_col3 = st.columns([1.5, 1, 1])
+    filter_col1, filter_col2, filter_col3, filter_col4 = st.columns([
+                                                                    1.5, 1, 1, 0.3])
     with filter_col1:
         search_text = st.text_input(
             "Search ticket", placeholder="Title, ID, assignee")
@@ -73,6 +74,11 @@ if not tickets_df.empty:
         priority_filter = st.multiselect(
             "Priority", ["Low", "Medium", "High", "Critical"], default=["Low", "Medium", "High", "Critical"]
         )
+    with filter_col4:
+        st.markdown("<div style='height: 28px;'></div>",
+                    unsafe_allow_html=True)
+        if st.button("🔄", help="Refresh data", use_container_width=True, key="refresh_tickets"):
+            st.rerun()
 
     filtered_tickets_df = tickets_df.copy()
     if search_text:
