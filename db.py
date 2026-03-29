@@ -89,6 +89,42 @@ class TicketActivity(Base):
     ticket = relationship("Ticket", back_populates="activities")
 
 
+class AuditLog(Base):
+    __tablename__ = "audit_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    entity_type = Column(String, nullable=False, index=True)
+    entity_id = Column(String, nullable=True)
+    action = Column(String, nullable=False)
+    actor = Column(String, default="System")
+    details = Column(Text, nullable=True)
+    ip_address = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+
+class SystemMetric(Base):
+    __tablename__ = "system_metrics"
+
+    id = Column(Integer, primary_key=True, index=True)
+    metric_name = Column(String, nullable=False, index=True)
+    metric_value = Column(String, nullable=False)
+    unit = Column(String, nullable=True)
+    recorded_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    message = Column(Text, nullable=False)
+    notification_type = Column(String, default="info")
+    entity_type = Column(String, nullable=True)
+    entity_id = Column(String, nullable=True)
+    is_read = Column(Integer, default=0)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+
 def _ensure_column_exists(table_name, column_name, column_sql):
     inspector = inspect(engine)
     existing_columns = {col["name"]
@@ -162,6 +198,43 @@ def add_ticket_activity(session, ticket_id, actor, action, note=""):
             action=action,
             note=note,
             created_at=datetime.utcnow(),
+        )
+    )
+
+
+def add_audit_log(session, entity_type, action, entity_id=None, actor="System", details=None):
+    session.add(
+        AuditLog(
+            entity_type=entity_type,
+            entity_id=str(entity_id) if entity_id else None,
+            action=action,
+            actor=actor,
+            details=details,
+            created_at=datetime.utcnow(),
+        )
+    )
+
+
+def add_notification(session, title, message, notification_type="info", entity_type=None, entity_id=None):
+    session.add(
+        Notification(
+            title=title,
+            message=message,
+            notification_type=notification_type,
+            entity_type=entity_type,
+            entity_id=str(entity_id) if entity_id else None,
+            created_at=datetime.utcnow(),
+        )
+    )
+
+
+def record_system_metric(session, metric_name, metric_value, unit=None):
+    session.add(
+        SystemMetric(
+            metric_name=metric_name,
+            metric_value=str(metric_value),
+            unit=unit,
+            recorded_at=datetime.utcnow(),
         )
     )
 
